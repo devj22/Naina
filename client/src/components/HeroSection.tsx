@@ -1,44 +1,7 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
-import { Search, ChevronDown } from 'lucide-react';
-import { apiRequest } from '@/lib/queryClient';
-
-const searchSchema = z.object({
-  location: z.string(),
-  propertyType: z.string(),
-  budget: z.string(),
-  area: z.string()
-});
-
-type SearchFormData = z.infer<typeof searchSchema>;
+import { Search } from 'lucide-react';
 
 const HeroSection = () => {
-  const form = useForm<SearchFormData>({
-    resolver: zodResolver(searchSchema),
-    defaultValues: {
-      location: "any",
-      propertyType: "all",
-      budget: "any",
-      area: "any"
-    }
-  });
-
-  const onSubmit = async (data: SearchFormData) => {
-    try {
-      // In a real application, we would submit this to the server
-      console.log("Search criteria:", data);
-      // This could redirect to a search results page
-    } catch (error) {
-      console.error("Error searching properties:", error);
-    }
-  };
 
   return (
     <section id="home" className="relative h-screen bg-neutral-900 overflow-hidden">
@@ -80,118 +43,31 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* Property search bar */}
+      {/* Call-to-action bar */}
       <div className="absolute bottom-0 left-0 right-0 bg-white shadow-lg rounded-t-lg z-20 transform translate-y-1/2">
         <div className="container mx-auto px-4 py-6">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem className="relative">
-                    <Label className="block text-sm font-medium text-neutral-900 mb-1">Location</Label>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="w-full bg-gray-100 border border-gray-300 rounded-md">
-                          <SelectValue placeholder="Any Location" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="any">Any Location</SelectItem>
-                        <SelectItem value="mumbai">Mumbai</SelectItem>
-                        <SelectItem value="delhi_ncr">Delhi NCR</SelectItem>
-                        <SelectItem value="bangalore">Bangalore</SelectItem>
-                        <SelectItem value="pune">Pune</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="propertyType"
-                render={({ field }) => (
-                  <FormItem className="relative">
-                    <Label className="block text-sm font-medium text-neutral-900 mb-1">Property Type</Label>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="w-full bg-gray-100 border border-gray-300 rounded-md">
-                          <SelectValue placeholder="All Types" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="all">All Types</SelectItem>
-                        <SelectItem value="residential">Residential</SelectItem>
-                        <SelectItem value="commercial">Commercial</SelectItem>
-                        <SelectItem value="industrial">Industrial</SelectItem>
-                        <SelectItem value="land">Land/Plots</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="budget"
-                render={({ field }) => (
-                  <FormItem className="relative">
-                    <Label className="block text-sm font-medium text-neutral-900 mb-1">Budget</Label>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="w-full bg-gray-100 border border-gray-300 rounded-md">
-                          <SelectValue placeholder="Any Budget" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="any">Any Budget</SelectItem>
-                        <SelectItem value="under_50L">Under ₹50 Lakh</SelectItem>
-                        <SelectItem value="50L_1Cr">₹50 Lakh - 1 Cr</SelectItem>
-                        <SelectItem value="1Cr_2Cr">₹1 Cr - 2 Cr</SelectItem>
-                        <SelectItem value="above_2Cr">Above ₹2 Cr</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="area"
-                render={({ field }) => (
-                  <FormItem className="relative">
-                    <Label className="block text-sm font-medium text-neutral-900 mb-1">Area (sq.ft)</Label>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="w-full bg-gray-100 border border-gray-300 rounded-md">
-                          <SelectValue placeholder="Any Size" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="any">Any Size</SelectItem>
-                        <SelectItem value="under_1000">Under 1000 sq.ft</SelectItem>
-                        <SelectItem value="1000_2000">1000-2000 sq.ft</SelectItem>
-                        <SelectItem value="2000_3000">2000-3000 sq.ft</SelectItem>
-                        <SelectItem value="above_3000">Above 3000 sq.ft</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-              
-              <div className="flex items-end">
-                <Button 
-                  type="submit" 
-                  className="w-full bg-[#4CAF50] hover:bg-[#2E7D32] text-white font-medium py-2 px-4 rounded-md transition-colors"
-                >
-                  <Search className="h-4 w-4 mr-2" />
-                  Search
-                </Button>
-              </div>
-            </form>
-          </Form>
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-4 md:mb-0 text-center md:text-left">
+              <h3 className="text-xl font-bold text-gray-900">Looking for Investment Land?</h3>
+              <p className="text-gray-600">Explore our premium land plots in high-growth locations</p>
+            </div>
+            <div className="flex gap-4">
+              <Button 
+                className="bg-[#4CAF50] hover:bg-[#2E7D32] text-white font-medium py-2 px-4 rounded-md transition-colors"
+                onClick={() => window.location.href = "/properties"}
+              >
+                <Search className="h-4 w-4 mr-2" />
+                Browse Properties
+              </Button>
+              <Button 
+                variant="outline"
+                className="border-[#4CAF50] text-[#4CAF50] hover:bg-[#4CAF50]/10 font-medium py-2 px-4 rounded-md transition-colors"
+                onClick={() => window.location.href = "#contact"}
+              >
+                Contact Us
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
