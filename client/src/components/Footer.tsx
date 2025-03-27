@@ -38,12 +38,12 @@ const Footer = () => {
             <h4 className="font-heading font-bold text-lg mb-6">Quick Links</h4>
             <ul className="space-y-3">
               {[
-                { href: "#home", label: "Home" },
-                { href: "#about", label: "About Us" },
-                { href: "#properties", label: "Properties" },
-                { href: "#blog", label: "Blog" },
-                { href: "#contact", label: "Contact" },
-                { href: "#", label: "Careers" }
+                { href: "/", label: "Home" },
+                { href: "/#about", label: "About Us" },
+                { href: "/properties", label: "Properties" },
+                { href: "/blog", label: "Blog" },
+                { href: "/#contact", label: "Contact" },
+                { href: "/careers", label: "Careers" }
               ].map(link => (
                 <li key={link.href}>
                   <a 
@@ -58,15 +58,15 @@ const Footer = () => {
           </div>
           
           <div>
-            <h4 className="font-heading font-bold text-lg mb-6">Property Types</h4>
+            <h4 className="font-heading font-bold text-lg mb-6">Land Categories</h4>
             <ul className="space-y-3">
               {[
-                { href: "#", label: "Residential Properties" },
-                { href: "#", label: "Commercial Properties" },
-                { href: "#", label: "Land/Plots" },
-                { href: "#", label: "Industrial Properties" },
-                { href: "#", label: "Investment Opportunities" },
-                { href: "#", label: "New Launches" }
+                { href: "/properties?type=land", label: "Open Land Plots" },
+                { href: "/properties?type=agricultural", label: "Agricultural Land" },
+                { href: "/properties?type=commercial", label: "Commercial Land" },
+                { href: "/properties?type=industrial", label: "Industrial Land" },
+                { href: "/properties?type=residential", label: "Residential Plots" },
+                { href: "/properties?status=new", label: "New Projects" }
               ].map(link => (
                 <li key={link.href}>
                   <a 

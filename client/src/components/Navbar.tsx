@@ -10,21 +10,14 @@ const Navbar = () => {
   const [location] = useLocation();
   const isHomePage = location === "/";
 
-  // Links change based on current page
-  const NAV_LINKS = isHomePage
-    ? [
-        { href: "#home", label: "Home" },
-        { href: "#about", label: "About Us" },
-        { href: "#properties", label: "Properties" },
-        { href: "#blog", label: "Blog" },
-        { href: "#contact", label: "Contact" }
-      ]
-    : [
-        { href: "/", label: "Home" },
-        { href: "/properties", label: "Properties" },
-        { href: "/blog", label: "Blog" },
-        { href: "/#contact", label: "Contact" }
-      ];
+  // Links for both homepage and other pages
+  const NAV_LINKS = [
+    { href: isHomePage ? "#home" : "/", label: "Home" },
+    { href: isHomePage ? "#about" : "/#about", label: "About Us" },
+    { href: "/properties", label: "Properties" },
+    { href: "/blog", label: "Blog" },
+    { href: isHomePage ? "#contact" : "/#contact", label: "Contact" }
+  ];
 
   // Handle scroll effect for navbar background
   useEffect(() => {
