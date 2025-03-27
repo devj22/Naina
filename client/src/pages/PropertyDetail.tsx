@@ -1,6 +1,7 @@
-import { useParams, Link } from 'wouter';
+import { useParams, Link, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { Property } from '@shared/schema';
+import { useToast } from '@/hooks/use-toast.ts';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -23,19 +24,58 @@ import {
   Phone,
   Mail,
   Check,
-  ArrowLeft
+  ArrowLeft,
+  Share2
 } from 'lucide-react';
 import { formatPropertyPrice, formatPropertyType, formatListingStatus, formatDate } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useState, useEffect } from 'react';
+import { 
+  FacebookShareButton, 
+  TwitterShareButton, 
+  WhatsappShareButton, 
+  LinkedinShareButton,
+  TelegramShareButton,
+  EmailShareButton,
+  FacebookIcon, 
+  TwitterIcon, 
+  WhatsappIcon, 
+  LinkedinIcon,
+  TelegramIcon,
+  EmailIcon
+} from 'react-share';
 
 const PropertyDetail = () => {
   const { id } = useParams();
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [location] = useLocation();
+  const { toast } = useToast();
   
   const { data: property, isLoading } = useQuery<Property>({
     queryKey: [`/api/properties/${id}`],
   });
+  
+  // Current URL for sharing
+  const currentUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}/properties/${id}`
+    : '';
+
+  // Close share popup when clicking outside of it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (shareOpen && !target.closest('.share-container')) {
+        setShareOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [shareOpen]);
 
   // Initialize map when property data is available
   useEffect(() => {
@@ -236,6 +276,109 @@ const PropertyDetail = () => {
                 <Button variant="outline" className="border-[#4CAF50] text-[#4CAF50] hover:bg-[#4CAF50] hover:text-white">
                   <Mail className="h-4 w-4 mr-2" /> Email Inquiry
                 </Button>
+                <div className="relative share-container">
+                  <Button 
+                    variant="outline" 
+                    className="border-gray-300 text-gray-700 hover:bg-gray-100"
+                    onClick={() => setShareOpen(!shareOpen)}
+                  >
+                    <Share2 className="h-4 w-4 mr-2" /> Share
+                  </Button>
+                  
+                  {/* Social Share Buttons */}
+                  {shareOpen && (
+                    <div className="absolute right-0 mt-2 p-4 bg-white rounded-lg shadow-lg z-30 w-72 border border-gray-200 share-container">
+                      <h4 className="font-semibold text-sm mb-3 text-neutral-900">Share this property</h4>
+                      
+                      <div className="grid grid-cols-3 gap-3">
+                        <FacebookShareButton 
+                          url={currentUrl} 
+                          // @ts-ignore - react-share typings don't match the actual API
+                          quote={`Check out this property: ${property.title}`}
+                        >
+                          <div className="flex flex-col items-center">
+                            <FacebookIcon size={40} round={true} />
+                            <span className="text-xs mt-1">Facebook</span>
+                          </div>
+                        </FacebookShareButton>
+                        
+                        <TwitterShareButton url={currentUrl} title={`Check out this property: ${property.title}`}>
+                          <div className="flex flex-col items-center">
+                            <TwitterIcon size={40} round={true} />
+                            <span className="text-xs mt-1">Twitter</span>
+                          </div>
+                        </TwitterShareButton>
+                        
+                        <WhatsappShareButton url={currentUrl} title={`Check out this property: ${property.title}`}>
+                          <div className="flex flex-col items-center">
+                            <WhatsappIcon size={40} round={true} />
+                            <span className="text-xs mt-1">WhatsApp</span>
+                          </div>
+                        </WhatsappShareButton>
+                        
+                        <LinkedinShareButton 
+                          url={currentUrl} 
+                          title={property.title} 
+                          // @ts-ignore - react-share typings don't match the actual API
+                          summary={property.description?.substring(0, 100)}
+                        >
+                          <div className="flex flex-col items-center">
+                            <LinkedinIcon size={40} round={true} />
+                            <span className="text-xs mt-1">LinkedIn</span>
+                          </div>
+                        </LinkedinShareButton>
+                        
+                        <TelegramShareButton url={currentUrl} title={`Check out this property: ${property.title}`}>
+                          <div className="flex flex-col items-center">
+                            <TelegramIcon size={40} round={true} />
+                            <span className="text-xs mt-1">Telegram</span>
+                          </div>
+                        </TelegramShareButton>
+                        
+                        <EmailShareButton 
+                          url={currentUrl} 
+                          // @ts-ignore - react-share typings don't match the actual API
+                          subject={`Property Listing: ${property.title}`} 
+                          // @ts-ignore - react-share typings don't match the actual API
+                          body={`Check out this property I found on Nainaland Deals:\n\n${property.title}\n${property.description?.substring(0, 100)}...\n\n`}
+                        >
+                          <div className="flex flex-col items-center">
+                            <EmailIcon size={40} round={true} />
+                            <span className="text-xs mt-1">Email</span>
+                          </div>
+                        </EmailShareButton>
+                      </div>
+                      
+                      <div className="mt-3">
+                        <p className="text-xs text-neutral-700 mb-2">Copy link</p>
+                        <div className="flex gap-2">
+                          <input 
+                            type="text" 
+                            value={currentUrl}
+                            readOnly
+                            className="text-xs p-2 border border-gray-300 rounded flex-1 bg-gray-50" 
+                          />
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="text-xs"
+                            onClick={() => {
+                              navigator.clipboard.writeText(currentUrl);
+                              setCopySuccess(true);
+                              toast({
+                                title: "Link copied!",
+                                description: "Property link has been copied to clipboard",
+                                variant: "default",
+                              });
+                            }}
+                          >
+                            Copy
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             
