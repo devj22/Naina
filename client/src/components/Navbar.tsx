@@ -4,18 +4,27 @@ import Logo from './Logo';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const NAV_LINKS = [
-  { href: "#home", label: "Home" },
-  { href: "#about", label: "About Us" },
-  { href: "#properties", label: "Properties" },
-  { href: "#blog", label: "Blog" },
-  { href: "#contact", label: "Contact" }
-];
-
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [location] = useLocation();
+  const isHomePage = location === "/";
+
+  // Links change based on current page
+  const NAV_LINKS = isHomePage
+    ? [
+        { href: "#home", label: "Home" },
+        { href: "#about", label: "About Us" },
+        { href: "#properties", label: "Properties" },
+        { href: "#blog", label: "Blog" },
+        { href: "#contact", label: "Contact" }
+      ]
+    : [
+        { href: "/", label: "Home" },
+        { href: "/properties", label: "Properties" },
+        { href: "/blog", label: "Blog" },
+        { href: "/#contact", label: "Contact" }
+      ];
 
   // Handle scroll effect for navbar background
   useEffect(() => {
@@ -42,9 +51,9 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link href="/">
-          <a className="flex items-center space-x-2">
+          <span className="flex items-center space-x-2">
             <Logo />
-          </a>
+          </span>
         </Link>
         
         {/* Desktop Menu */}

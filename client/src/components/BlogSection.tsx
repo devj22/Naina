@@ -4,11 +4,15 @@ import { BlogPost } from '@shared/schema';
 import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronRight } from 'lucide-react';
+import { Link } from 'wouter';
 
 const BlogSection = () => {
   const { data: blogPosts, isLoading } = useQuery<BlogPost[]>({
     queryKey: ['/api/blog-posts'],
   });
+
+  // Limit to only 3 blog posts on the home page
+  const displayBlogPosts = blogPosts?.slice(0, 3);
 
   return (
     <section id="blog" className="py-20 bg-gray-100">
@@ -38,20 +42,22 @@ const BlogSection = () => {
               </div>
             ))
           ) : (
-            blogPosts?.map(post => (
+            displayBlogPosts?.map(post => (
               <BlogCard key={post.id} post={post} />
             ))
           )}
         </div>
         
         <div className="text-center mt-12">
-          <Button 
-            variant="outline" 
-            className="inline-flex items-center px-6 py-3 border-2 border-[#4CAF50] text-[#4CAF50] hover:bg-[#4CAF50] hover:text-white font-medium rounded-md transition-colors"
-          >
-            View All Articles
-            <ChevronRight className="h-5 w-5 ml-2" />
-          </Button>
+          <Link href="/blog">
+            <Button 
+              variant="outline" 
+              className="inline-flex items-center px-6 py-3 border-2 border-[#4CAF50] text-[#4CAF50] hover:bg-[#4CAF50] hover:text-white font-medium rounded-md transition-colors"
+            >
+              View All Articles
+              <ChevronRight className="h-5 w-5 ml-2" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

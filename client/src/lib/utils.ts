@@ -12,7 +12,10 @@ export function cn(...inputs: ClassValue[]): string {
 /**
  * Formats a date to a readable string
  */
-export function formatDate(date: Date | string): string {
+export function formatDate(date: Date | string | null): string {
+  if (!date) {
+    return "No date";
+  }
   if (typeof date === "string") {
     date = new Date(date);
   }

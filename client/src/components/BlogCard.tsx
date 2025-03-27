@@ -34,10 +34,10 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
       </CardContent>
       <CardFooter className="p-6 pt-0">
         <Link href={`/blog/${id}`}>
-          <a className="inline-flex items-center text-[#4CAF50] hover:text-[#2E7D32] font-medium transition-colors">
+          <span className="inline-flex items-center text-[#4CAF50] hover:text-[#2E7D32] font-medium transition-colors cursor-pointer">
             Read More
             <ChevronRight className="h-4 w-4 ml-1" />
-          </a>
+          </span>
         </Link>
       </CardFooter>
     </Card>
