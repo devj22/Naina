@@ -42,34 +42,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      
-      {/* Call-to-action bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white shadow-lg rounded-t-lg z-20 transform translate-y-1/2">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="mb-4 md:mb-0 text-center md:text-left">
-              <h3 className="text-xl font-bold text-gray-900">Looking for Investment Land?</h3>
-              <p className="text-gray-600">Explore our premium land plots in high-growth locations</p>
-            </div>
-            <div className="flex gap-4">
-              <Button 
-                className="bg-[#4CAF50] hover:bg-[#2E7D32] text-white font-medium py-2 px-4 rounded-md transition-colors"
-                onClick={() => window.location.href = "/properties"}
-              >
-                <Search className="h-4 w-4 mr-2" />
-                Browse Properties
-              </Button>
-              <Button 
-                variant="outline"
-                className="border-[#4CAF50] text-[#4CAF50] hover:bg-[#4CAF50]/10 font-medium py-2 px-4 rounded-md transition-colors"
-                onClick={() => window.location.href = "#contact"}
-              >
-                Contact Us
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
   );
 };
