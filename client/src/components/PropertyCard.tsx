@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Property } from '@shared/schema';
 import { Link } from 'wouter';
-import { MapPin, Square, Bed, Bath } from 'lucide-react';
+import { MapPin, Square, Ruler, TreePine } from 'lucide-react';
 import { formatPropertyPrice, formatPropertyType, formatListingStatus } from '@/lib/utils';
 
 interface PropertyCardProps {
